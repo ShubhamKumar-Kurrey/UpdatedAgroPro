@@ -1,26 +1,27 @@
 package com.example.updatedagropro
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.GridCells
-import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.layout.R
 import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
-import androidx.compose.ui.res.fontResource
+import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.sp
@@ -28,111 +29,168 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
-import androidx.navigation.compose.rememberNavController
+import com.example.updatedagropro.network.API
+import com.google.accompanist.pager.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withTimeout
+import java.nio.file.Files.setLastModifiedTime
+//import okio.Utf8.size
+import java.nio.file.Files.size
+import java.util.*
+import kotlin.concurrent.fixedRateTimer
+import kotlin.io.path.ExperimentalPathApi
 
+
+@OptIn(ExperimentalPagerApi::class)
 @Composable
-fun ReadingsScreen(){
-    Box(modifier = Modifier
-        .fillMaxSize(1f)
-        .padding(10.dp),
-    contentAlignment = Alignment.Center) {
-        Column(modifier = Modifier.fillMaxWidth(1f),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Column(modifier = Modifier.padding(10.dp),
-                horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.SpaceAround) {
-               /* LazyRow(Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween){
-                    items(1){
-                        Text(text ="Slave 1" ,fontSize = 20.sp,fontWeight = FontWeight.Bold,color = Color.Green)
-                        Text(text ="Slave 2" ,fontSize = 20.sp,fontWeight = FontWeight.Bold)
-                        Text(text ="Slave 3" ,fontSize = 20.sp,fontWeight = FontWeight.Bold)
-                        Text(text ="Slave 4" ,fontSize = 20.sp,fontWeight = FontWeight.Bold)
-                    }
-                    }*/
-
-               Row(modifier = Modifier
-                   .padding(40.dp)
-                   .fillMaxWidth(1f),
-                   horizontalArrangement = Arrangement.SpaceBetween,
-               verticalAlignment = Alignment.Top) {
-                   Sensor(value = 0.2f, text = "Soil Temperature")
-                   Sensor(value = 0.86f, text = "Soil Moisture")
-               }
-                Row(modifier = Modifier
-                    .padding(40.dp)
-                    .fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically) {
-                    Sensor(value = 0.4f, text = "Air Temperature")
-                    Sensor(value = 0.56f, text = "Moisture")
-                }
-            }
-           
-       }
-
+fun ReadingsScreen() {
+    Box(
+        modifier = Modifier
+            .fillMaxSize(1f)
+            .padding(10.dp),
+        contentAlignment = Alignment.Center
+    ) {
+        SwipingScreen()
     }
 }
 
 @Composable
-fun Sensor(value: Float,
-                text: String) {
+fun Sensor(Value: Float, text: String) {
     Box() {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center) {
-            circularProgressBar(percentage = value, number = 100)
-            Text(text =text ,fontSize = 15.sp,fontWeight = FontWeight.Bold)
+            verticalArrangement = Arrangement.Center
+        ) {
+            circularProgressBar(percentage = Value, number = 1)
+            Spacer(modifier = Modifier.padding(5.dp))
+            Text(text = text, fontSize = 17.sp, fontWeight = FontWeight.Bold)
         }
     }
 }
 
 @Composable
+fun Slaves(slave: Slave_Name, slaveId: String) {
+    var at by remember {
+        mutableStateOf(0f)
+    }
+    var sm by remember {
+        mutableStateOf(0f)
+    }
+    var st by remember {
+        mutableStateOf(0f)
+    }
+    var am by remember {
+        mutableStateOf(0f)
+    }
+    val scope = rememberCoroutineScope()
+    LaunchedEffect(key1 = Unit) {
+        fixedRateTimer("observer", startAt = Date(), period = 1000) {
+            scope.launch(Dispatchers.IO) {
+                withTimeout(2000) {
+                    val res = API.getSensorData(slaveId)
+                    val reading = res.getOrNull()
+                    if(reading != null){
+                        am = reading.ah
+                        at = reading.at
+                        sm = reading.sm
+                        st = reading.st
+
+                    }
+                }
+            }
+        }
+    }
+    Column(
+        modifier = Modifier
+            .fillMaxWidth(1f)
+            .padding(horizontal = 10.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Top
+    ) {
+
+        Text(text = slave.name, fontSize = 30.sp, fontWeight = FontWeight.Bold, color = Color.Blue)
+        for (i in 1..4) {
+            val i: Int
+            i = 0
+        }
+        Row(
+            modifier = Modifier
+                .padding(40.dp)
+                .fillMaxWidth(1f),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.Top
+        ) {
+            Sensor(Value = st, text = "Soil Temperature")
+            Spacer(modifier = Modifier.padding(horizontal = 25.dp))
+            Sensor(Value = sm, text = "Soil Moisture")
+        }
+        Row(
+            modifier = Modifier
+                .padding(40.dp)
+                .fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Sensor(Value = at, text = "Air Temperature")
+            Spacer(modifier = Modifier.padding(horizontal = 25.dp))
+            Sensor(Value = am, text = "Moisture")
+        }
+    }
+
+}
+
+
+@Composable
 fun circularProgressBar(
     radius: Dp = 50.dp,
-    strokeWidth: Dp =8.dp,
-    percentage :Float,
-    color: Color =if (percentage>0.8f) {
-        Color.Red
-    }
-    else {
+    strokeWidth: Dp = 8.dp,
+    percentage: Float,
+    color: Color = if (percentage >= 20f && percentage <= 45f) {
         Color.Blue
+    } else if (percentage < 20f) {
+        Color.Red
+    } else if (percentage > 70f) {
+        Color.Red
+    } else if (percentage <= 70f && percentage >= 60) {
+        Color.Blue
+    } else {
+        Color.Green
     },
     number: Int,
-    fontSize: TextUnit =28.sp,
-    animeDuration: Int=1000,
-    animDelay: Int=0
-){
+    fontSize: TextUnit = 28.sp,
+    animeDuration: Int = 1000,
+    animDelay: Int = 0
+) {
 
 
-    var animationPlayed by remember{
+    var animationPlayed by remember {
         mutableStateOf(false)
     }
-    val curPercentage= animateFloatAsState(
-        targetValue = if (animationPlayed)percentage else 0f,
+    val curPercentage = animateFloatAsState(
+        targetValue = if (animationPlayed) percentage else 0f,
         animationSpec = tween(
             durationMillis = animeDuration,
             delayMillis = animDelay
         )
     )
-    LaunchedEffect(key1 = true){
-        animationPlayed=true
+    LaunchedEffect(key1 = true) {
+        animationPlayed = true
     }
-    Box (
+    Box(
         contentAlignment = Alignment.Center,
-        modifier = Modifier.size(radius*2f)
-    ){
-        Canvas(modifier = Modifier.size(radius*2f)) {
+        modifier = Modifier.size(radius * 2f)
+    ) {
+        Canvas(modifier = Modifier.size(radius * 2f)) {
             drawArc(
                 color = color,
                 -90f,
-                360 * curPercentage.value,
+                3.6f * curPercentage.value,
                 useCenter = false,
-                style= Stroke(strokeWidth.toPx(), cap= StrokeCap.Round)
+                style = Stroke(strokeWidth.toPx(), cap = StrokeCap.Round)
             )
         }
-        val valuenumber=curPercentage.value*number
+        val valuenumber = curPercentage.value * number
 
         Text(
             text = valuenumber.toInt().toString(),
@@ -145,93 +203,31 @@ fun circularProgressBar(
 }
 
 
+@OptIn(ExperimentalPagerApi::class)
+@ExperimentalPagerApi // 1.
 @Composable
-fun Slaves(name: String,modifier: Modifier) {
-    Text(text=name,
-        fontSize = 20.sp,
-        fontWeight = FontWeight.Bold,
-        modifier = Modifier.padding(10.dp),
-        color = Color.Red
-    )
+fun SwipingScreen() {
+
+    val pageState = rememberPagerState()
+
+    Column {
+
+        HorizontalPager(
+            count = 4,
+            state = pageState,
+            modifier = Modifier
+                .fillMaxSize(1f)
+        ) { exercise ->
+            Slaves(slave = dataList[exercise], (exercise + 1).toString())
+        }
+        HorizontalPagerIndicator(
+            pagerState = pageState,
+            modifier = Modifier
+                .align(Alignment.CenterHorizontally)
+                .padding(20.dp)
+        )
+
+    }
 }
 
 
-@Composable
-fun Slave1() {
-    Sensor(value = 0.3f, text = "Mositure")
-}
-
-@Composable
-fun Slave2(navHostController: NavHostController) {
-    DetailScreen()
-}
-
-@Composable
-fun SlaveNavBadges(
-    items: List<SlaveItem>,
-    navController: NavController,
-    onItemClick: (SlaveItem) -> Unit
-)
- {
-     val backStackEntry=navController.currentBackStackEntryAsState()
-     items.forEach{item ->
-         val selected= item.route==backStackEntry.value?.destination?.route
-             LazyRow() {
-               items(1) {
-
-                     /*  Column(
-                           horizontalAlignment = Alignment.CenterHorizontally,
-                           verticalArrangement = Arrangement.Center
-                       ) {*/
-                           Text(
-                               text = item.name,
-                               textAlign = TextAlign.Center,
-                               fontSize = 25.sp,
-                               color = Color.Red
-                           )
-                          /* if (selected) {
-                               Text(
-                                   text = item.name,
-                                   textAlign = TextAlign.Center,
-                                   fontSize = 30.sp,
-                                   color = Color.Green
-                               )
-                           }*/
-                       //}
-                   }
-               }
-
-
-
-
-
-     }
-    
-}
-
-@Composable
-fun Slaves() {
-    val navController= rememberNavController()
-    SlaveNavBadges(items = listOf(
-        SlaveItem(
-     name = "Slave 1",
-     route = "Slave 1"
-    ),
-        SlaveItem(
-            name = "Slave 2",
-            route = "Slave 2"
-        ),
-        SlaveItem(
-            name = "Slave 3",
-            route = "Slave 3"
-        ),
-        SlaveItem(
-            name = "Slave 4",
-            route = "Slave 4"
-        ),
-
-
-    ), navController =navController , onItemClick ={
-        navController.navigate(it.route)
-    })
-}
