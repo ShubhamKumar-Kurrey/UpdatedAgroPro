@@ -16,6 +16,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -25,8 +26,13 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.example.updatedagropro.WindSunAPI.APISW
 import com.example.updatedagropro.network.API
 import com.example.updatedagropro.network.SensorData
+import com.google.accompanist.pager.ExperimentalPagerApi
+import com.google.accompanist.pager.HorizontalPager
+import com.google.accompanist.pager.HorizontalPagerIndicator
+import com.google.accompanist.pager.rememberPagerState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.produce
 import kotlinx.coroutines.launch
@@ -43,9 +49,17 @@ fun MainScreen() {
 
     val navController = rememberNavController()
     Scaffold(
-
         topBar = {
             TopAppBar(backgroundColor = Color.Blue,
+                navigationIcon = {
+                                 IconButton(onClick = {}) {
+                                     Icon(
+                                         Icons.Filled.Menu, contentDescription = "menu",
+                                         tint = Color.White
+                                     )
+
+                                 }
+                },
                 title = {
                     Text(
                         "AgroPro 2.0",
@@ -207,6 +221,113 @@ fun DetailScreen() {
     }
 }
 
+
+
+
+@Composable
+fun Weather() {
+    Scaffold(
+        topBar = {
+            TopAppBar(modifier = Modifier.padding(10.dp),
+                actions = {
+                    IconButton(onClick = { }) {
+                        Icon(
+                            Icons.Filled.ArrowBack, contentDescription = "About Us",
+                            tint = Color.Black
+                        )
+                    }
+                },
+                title = {
+                    Text(
+                        "Weather",
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 22.sp
+                    )
+                }
+            )
+
+        }
+    ) {
+        WeatherBox()
+    }
+}
+
+@Composable
+fun WeatherBox() {
+    Column(modifier=Modifier.fillMaxSize(0.5f)){
+       Column(){
+           Text(text = "Bhuli,Dhanbad")
+           Text(text = "27°C", fontSize = 30.sp)
+           Text(text="Sunny Day")
+       }
+        Column(){
+            Row(){
+                Column(){
+                    Text(text="Sat")
+                    Text(text="1:15 PM")
+                }
+                Column(){
+                    Text(text="Rainy")
+                    Text(text="1:15 PM")
+                    Row(){
+                        Column(){
+                            Text(text="Rainy")
+                            Text(text="1:15 PM")
+                        }
+                    }
+                }
+
+            }
+        }
+    }
+}
+
+
+@Composable
+fun SunWindReading(slaveId: String) {
+    var sl by remember {
+        mutableStateOf(0f)
+    }
+    var ws by remember {
+        mutableStateOf(0f)
+    }
+    val scope = rememberCoroutineScope()
+    LaunchedEffect(key1 = Unit) {
+        fixedRateTimer("observer", startAt = Date(), period = 1000) {
+            scope.launch(Dispatchers.IO) {
+                withTimeout(2000) {
+                    val res = APISW.getSunWindDatavalue(slaveId)
+                    val reading = res.getOrNull()
+                    if(reading != null){
+                        sl = reading.sl
+                        ws = reading.ws
+                    }
+                }
+            }
+
+        }
+    }
+
+    Column(
+        modifier = Modifier
+            .fillMaxWidth(1f)
+            .padding(horizontal = 10.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Top
+    ) {
+
+        Text(text = "Sun & Wind", fontSize = 30.sp, fontWeight = FontWeight.Bold, color = Color.Blue)
+
+            Sensor(Value = sl,headingname="Sun Light")
+            Spacer(modifier = Modifier.padding(horizontal = 25.dp))
+            Sensor(Value = ws, headingname = "Wind Speed")
+        }
+
+}
+
+
+
+@OptIn(ExperimentalPagerApi::class)
 @Composable
 fun Sun_Wind() {
     Box(
@@ -215,12 +336,44 @@ fun Sun_Wind() {
             .background(color = Color.White),
         contentAlignment = Alignment.Center
     ) {
-        Column {
-            circularProgressBar(percentage = 10f, number = 1)
-            circularProgressBar(percentage = 30f, number = 1)
+        Box(
+            modifier = Modifier
+                .fillMaxSize(1f)
+                .padding(10.dp),
+            contentAlignment = Alignment.Center
+        ) {
+            ScreenWindSun()
         }
+    }
+}
+
+
+@OptIn(ExperimentalPagerApi::class)
+@ExperimentalPagerApi // 1.
+@Composable
+fun ScreenWindSun() {
+
+    val pageState = rememberPagerState()
+
+    Column {
+
+        HorizontalPager(
+            count = 1,
+            state = pageState,
+            modifier = Modifier
+                .fillMaxSize(1f)
+        ) { exer ->
+            SunWindReading(exer.toString())
+        }
+        HorizontalPagerIndicator(
+            pagerState = pageState,
+            modifier = Modifier
+                .align(Alignment.CenterHorizontally)
+                .padding(20.dp)
+        )
 
     }
 }
+
 
 

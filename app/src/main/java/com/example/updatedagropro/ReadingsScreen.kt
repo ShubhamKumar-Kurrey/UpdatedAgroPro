@@ -14,6 +14,7 @@ import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
@@ -56,15 +57,15 @@ fun ReadingsScreen() {
 }
 
 @Composable
-fun Sensor(Value: Float, text: String) {
+fun Sensor(Value: Float, headingname: String) {
     Box() {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
-            circularProgressBar(percentage = Value, number = 1)
+            circularProgressBar(percentage = Value, number = 1, heading=headingname)
             Spacer(modifier = Modifier.padding(5.dp))
-            Text(text = text, fontSize = 17.sp, fontWeight = FontWeight.Bold)
+           // Text(fontSize = 17.sp, fontWeight = FontWeight.Bold)
         }
     }
 }
@@ -83,6 +84,7 @@ fun Slaves(slave: Slave_Name, slaveId: String) {
     var am by remember {
         mutableStateOf(0f)
     }
+
     val scope = rememberCoroutineScope()
     LaunchedEffect(key1 = Unit) {
         fixedRateTimer("observer", startAt = Date(), period = 1000) {
@@ -99,8 +101,10 @@ fun Slaves(slave: Slave_Name, slaveId: String) {
                     }
                 }
             }
+
         }
     }
+
     Column(
         modifier = Modifier
             .fillMaxWidth(1f)
@@ -121,9 +125,9 @@ fun Slaves(slave: Slave_Name, slaveId: String) {
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.Top
         ) {
-            Sensor(Value = st, text = "Soil Temperature")
+            Sensor(Value = st,headingname="Soil Temperature")
             Spacer(modifier = Modifier.padding(horizontal = 25.dp))
-            Sensor(Value = sm, text = "Soil Moisture")
+            Sensor(Value = sm, headingname = "Soil Moisture")
         }
         Row(
             modifier = Modifier
@@ -132,9 +136,9 @@ fun Slaves(slave: Slave_Name, slaveId: String) {
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Sensor(Value = at, text = "Air Temperature")
+            Sensor(Value = at, headingname = "Air Temperature")
             Spacer(modifier = Modifier.padding(horizontal = 25.dp))
-            Sensor(Value = am, text = "Moisture")
+            Sensor(Value = am, headingname="Humidity")
         }
     }
 
@@ -144,7 +148,7 @@ fun Slaves(slave: Slave_Name, slaveId: String) {
 @Composable
 fun circularProgressBar(
     radius: Dp = 50.dp,
-    strokeWidth: Dp = 8.dp,
+    strokeWidth: Dp = 12.dp,
     percentage: Float,
     color: Color = if (percentage >= 20f && percentage <= 45f) {
         Color.Blue
@@ -157,13 +161,12 @@ fun circularProgressBar(
     } else {
         Color.Green
     },
+    heading:String,
     number: Int,
     fontSize: TextUnit = 28.sp,
     animeDuration: Int = 1000,
     animDelay: Int = 0
 ) {
-
-
     var animationPlayed by remember {
         mutableStateOf(false)
     }
@@ -184,20 +187,31 @@ fun circularProgressBar(
         Canvas(modifier = Modifier.size(radius * 2f)) {
             drawArc(
                 color = color,
-                -90f,
-                3.6f * curPercentage.value,
+                 150f,
+                 2.4f*curPercentage.value,
                 useCenter = false,
-                style = Stroke(strokeWidth.toPx(), cap = StrokeCap.Round)
+                style = Stroke(
+                    strokeWidth.toPx(),
+                    cap = StrokeCap.Round
+                )
             )
         }
         val valuenumber = curPercentage.value * number
-
-        Text(
-            text = valuenumber.toInt().toString(),
-            color = Color.Black,
-            fontSize = fontSize,
-            fontWeight = FontWeight.Bold
-        )
+        Column(horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center) {
+            Text(
+                text = heading,
+                color = Color.Black,
+                fontSize = 12.sp,
+                fontWeight = FontWeight.Bold
+            )
+            Text(
+                text = valuenumber.toInt().toString(),
+                color = Color.Black,
+                fontSize = fontSize,
+                fontWeight = FontWeight.Bold
+            )
+        }
 
     }
 }
@@ -217,8 +231,8 @@ fun SwipingScreen() {
             state = pageState,
             modifier = Modifier
                 .fillMaxSize(1f)
-        ) { exercise ->
-            Slaves(slave = dataList[exercise], (exercise + 1).toString())
+        ) { page ->
+            Slaves(slave = dataList[page], (page + 1).toString())
         }
         HorizontalPagerIndicator(
             pagerState = pageState,
@@ -229,5 +243,4 @@ fun SwipingScreen() {
 
     }
 }
-
 
