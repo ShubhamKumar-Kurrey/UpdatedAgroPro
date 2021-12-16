@@ -170,26 +170,6 @@ fun BottomNavBadges(
 
 @Composable
 fun DetailScreen() {
-//    Box(
-//        modifier = Modifier
-//            .fillMaxSize()
-//            .background(color = Color.White),
-//        contentAlignment = Alignment.Center
-//    ) {
-//       /* Text(
-//            text = "Detail",
-//            color = Color.Red,
-//            fontSize = MaterialTheme.typography.h3.fontSize,
-//            fontWeight = FontWeight.Bold
-//        )*/
-//        LazyColumn(){
-//            item {
-//
-//            }
-//        }
-//
-//    }
-
     var data by remember {
         mutableStateOf<Result<SensorData>>(Result.failure(Exception("Initial")))
     }
@@ -243,8 +223,8 @@ fun SunWindReading(slaveId: String) {
         modifier = Modifier
             .fillMaxWidth(1f)
             .padding(horizontal = 10.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Top
+        verticalArrangement = Arrangement.Top,
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
         Text(text = "Sun & Wind", fontSize = 30.sp, fontWeight = FontWeight.Bold, color = Color.Blue)
