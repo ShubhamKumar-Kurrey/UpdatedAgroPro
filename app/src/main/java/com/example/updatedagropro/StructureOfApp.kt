@@ -44,80 +44,61 @@ import kotlin.concurrent.timerTask
 
 
 @Composable
-
-fun MainScreen() {
-
-    val navController = rememberNavController()
-    Scaffold(
-        topBar = {
-            TopAppBar(backgroundColor = Color.Blue,
-                navigationIcon = {
-                                 IconButton(onClick = {}) {
-                                     Icon(
-                                         Icons.Filled.Menu, contentDescription = "menu",
-                                         tint = Color.White
-                                     )
-
-                                 }
-                },
-                title = {
-                    Text(
-                        "AgroPro 2.0",
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 22.sp,
-                        color = Color.Green
-                    )
-                },
-                actions = {
-                    IconButton(onClick = { }) {
-                        Icon(
-                            Icons.Filled.AccountBox, contentDescription = "About Us",
-                            tint = Color.White
-                        )
-                    }
-                    IconButton(onClick = { }) {
-                        Icon(
-                            Icons.Filled.ExitToApp, contentDescription = "Power Off",
-                            tint = Color.White
-                        )
-                    }
-                }
-            )
-
-        },
-
-        bottomBar = {
-            BottomNavBadges(items = listOf(
-                NavitemS(
-                    name = "Readings",
-                    route = "home",
-                    icon = Icons.Default.Home
-                ),
-                NavitemS(
-                    name = "Sun & Wind",
-                    route = "sun",
-                    icon = Icons.Default.Star
-                ),
-                NavitemS(
-                    name = "Average",
-                    route = "details",
-                    icon = Icons.Default.Settings
-                )
-
-            ), navController = navController, onItemClick = {
-                navController.navigate(it.route)
-            })
+fun AppMainScreen() {
+    val navController1 = rememberNavController()
+    Surface(color = MaterialTheme.colors.background) {
+        val drawerState = rememberDrawerState(DrawerValue.Closed)
+        val scope = rememberCoroutineScope()
+        val openDrawer = {
+            scope.launch {
+                drawerState.open()
+            }
         }
-
-    ) {
-        Navigation(navController = navController)
-        //SlaveNavBadges()
+        ModalDrawer(
+            drawerState = drawerState,
+            gesturesEnabled = drawerState.isOpen,
+            drawerContent = {
+                Drawer(
+                    onDestinationClicked = { route ->
+                        scope.launch {
+                            drawerState.close()
+                        }
+                        navController1.navigate(route) {
+                            popUpTo = navController1.graph.startDestinationId
+                            launchSingleTop = true
+                        }
+                    }
+                )
+            }
+        ) {
+            NavHost(
+                navController = navController1
+                ,startDestination = DrawerScreens.Home.route
+            ) {
+                composable(DrawerScreens.Home.route) {
+                    Home(
+                        openDrawer = {
+                            openDrawer()
+                        }
+                    )
+                }
+            }
+        }
     }
 }
 
 
+
 @Composable
 fun Navigation(navController: NavHostController) {
+    val drawerState = rememberDrawerState(DrawerValue.Closed)
+    val scope = rememberCoroutineScope()
+    val openDrawer = {
+        scope.launch {
+            drawerState.open()
+        }
+    }
+
     NavHost(navController = navController, startDestination = "home") {
         composable(route = "home") {
             ReadingsScreen()
@@ -127,6 +108,18 @@ fun Navigation(navController: NavHostController) {
         }
         composable(route = "sun") {
             Sun_Wind()
+        }
+        composable(DrawerScreens.WeatherForecast.route) {
+            WeatherForecast(
+                openDrawer = {
+                    openDrawer()
+                }
+            )
+        }
+        composable(DrawerScreens.Help.route) {
+            Help(
+                navController = navController
+            )
         }
     }
 }
@@ -221,68 +214,6 @@ fun DetailScreen() {
     }
 }
 
-
-
-
-@Composable
-fun Weather() {
-    Scaffold(
-        topBar = {
-            TopAppBar(modifier = Modifier.padding(10.dp),
-                actions = {
-                    IconButton(onClick = { }) {
-                        Icon(
-                            Icons.Filled.ArrowBack, contentDescription = "About Us",
-                            tint = Color.Black
-                        )
-                    }
-                },
-                title = {
-                    Text(
-                        "Weather",
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 22.sp
-                    )
-                }
-            )
-
-        }
-    ) {
-        WeatherBox()
-    }
-}
-
-@Composable
-fun WeatherBox() {
-    Column(modifier=Modifier.fillMaxSize(0.5f)){
-       Column(){
-           Text(text = "Bhuli,Dhanbad")
-           Text(text = "27°C", fontSize = 30.sp)
-           Text(text="Sunny Day")
-       }
-        Column(){
-            Row(){
-                Column(){
-                    Text(text="Sat")
-                    Text(text="1:15 PM")
-                }
-                Column(){
-                    Text(text="Rainy")
-                    Text(text="1:15 PM")
-                    Row(){
-                        Column(){
-                            Text(text="Rainy")
-                            Text(text="1:15 PM")
-                        }
-                    }
-                }
-
-            }
-        }
-    }
-}
-
-
 @Composable
 fun SunWindReading(slaveId: String) {
     var sl by remember {
@@ -318,10 +249,10 @@ fun SunWindReading(slaveId: String) {
 
         Text(text = "Sun & Wind", fontSize = 30.sp, fontWeight = FontWeight.Bold, color = Color.Blue)
 
-            Sensor(Value = sl,headingname="Sun Light")
-            Spacer(modifier = Modifier.padding(horizontal = 25.dp))
-            Sensor(Value = ws, headingname = "Wind Speed")
-        }
+        Sensor(Value = sl,headingname="Sun Light")
+        Spacer(modifier = Modifier.padding(horizontal = 25.dp))
+        Sensor(Value = ws, headingname = "Wind Speed")
+    }
 
 }
 
@@ -374,6 +305,3 @@ fun ScreenWindSun() {
 
     }
 }
-
-
-
