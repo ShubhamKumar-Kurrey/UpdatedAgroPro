@@ -65,7 +65,6 @@ fun Sensor(Value: Float, headingname: String) {
         ) {
             circularProgressBar(percentage = Value, number = 1, heading=headingname)
             Spacer(modifier = Modifier.padding(5.dp))
-           // Text(fontSize = 17.sp, fontWeight = FontWeight.Bold)
         }
     }
 }
@@ -84,12 +83,19 @@ fun Slaves(slave: Slave_Name, slaveId: String) {
     var am by remember {
         mutableStateOf(0f)
     }
+    var ws by remember {
+        mutableStateOf(0f)
+    }
+    var sl by remember {
+        mutableStateOf(0f)
+    }
+
 
     val scope = rememberCoroutineScope()
     LaunchedEffect(key1 = Unit) {
         fixedRateTimer("observer", startAt = Date(), period = 1000) {
             scope.launch(Dispatchers.IO) {
-                withTimeout(2000) {
+                withTimeout(1000) {
                     val res = API.getSensorData(slaveId)
                     val reading = res.getOrNull()
                     if(reading != null){
@@ -97,6 +103,8 @@ fun Slaves(slave: Slave_Name, slaveId: String) {
                         at = reading.at
                         sm = reading.sm
                         st = reading.st
+                        ws=reading.ws
+                        sl=reading.sl
 
                     }
                 }
@@ -114,10 +122,7 @@ fun Slaves(slave: Slave_Name, slaveId: String) {
     ) {
 
         Text(text = slave.name, fontSize = 30.sp, fontWeight = FontWeight.Bold, color = Color.Blue)
-        for (i in 1..4) {
-            val i: Int
-            i = 0
-        }
+
         Row(
             modifier = Modifier
                 .padding(40.dp)

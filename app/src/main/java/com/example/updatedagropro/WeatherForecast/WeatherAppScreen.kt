@@ -8,7 +8,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Divider
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -19,6 +19,14 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.updatedagropro.R
+import com.example.updatedagropro.Sensor
+import com.example.updatedagropro.Slave_Name
+import com.example.updatedagropro.network.API
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withTimeout
+import java.util.*
+import kotlin.concurrent.fixedRateTimer
 
 @Composable
 fun WeatherPage() {
@@ -29,47 +37,52 @@ fun WeatherPage() {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         HeaderImage()
-        MainInfo()
-        InfoTable()
+        MainInfo(slaveId = 1.toString())
+        InfoTable(slaveId = 1.toString())
     }
 }
 
 @Composable
 fun HeaderImage() {
     Icon(
-        painter = painterResource(id = R.drawable.snow ),
+        painter = painterResource(id = R.drawable.sunfull),
         contentDescription = null,
-        modifier = Modifier.width(50.dp).size(50.dp),
+        modifier = Modifier
+            .width(50.dp)
+            .size(50.dp),
         tint= Color.Blue
     )
 }
 
-@Composable
-fun MainInfo() {
-    Column(
-        modifier = Modifier.padding(top = 24.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Text(text = "17°", color = Color.Blue, fontSize = 48.sp, fontWeight = FontWeight.Bold)
-        Text(
-            text = "Bhuli, Dhanbad",
-            color = Color.Blue,
-            fontWeight = FontWeight.Bold,
-            fontSize = 15.sp,
-            modifier = Modifier.padding(top = 16.dp)
-        )
-        Text(
-            text = "Today cloud is clear.\nVery less chance of Rain",
-            color = Color.Black,
-            fontSize = 16.sp,
-            textAlign = TextAlign.Center,
-            modifier = Modifier.padding(vertical = 24.dp)
-        )
-    }
-}
 
 @Composable
-fun InfoTable() {
+fun InfoTable(slaveId: String) {
+    var am by remember {
+        mutableStateOf(0f)
+    }
+    var ws by remember {
+        mutableStateOf(0f)
+    }
+
+
+    val scope = rememberCoroutineScope()
+    LaunchedEffect(key1 = Unit) {
+        fixedRateTimer("observer", startAt = Date(), period = 1000) {
+            scope.launch(Dispatchers.IO) {
+                withTimeout(10000) {
+                    val res = API.getSensorData(slaveId)
+                    val reading = res.getOrNull()
+                    if(reading != null){
+                        am = reading.ah
+                        ws = reading.ws
+
+                    }
+                }
+            }
+
+        }
+    }
+
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -82,7 +95,7 @@ fun InfoTable() {
             InfoItem(
                 iconRes = R.drawable.wind,
                 title = "Wind Speed",
-                subtitle = "12 m/s",
+                subtitle = ws.toString()+"m/s",
                 modifier = Modifier.weight(
                     1f
                 )
@@ -90,7 +103,7 @@ fun InfoTable() {
             InfoItem(
                 iconRes = R.drawable.wind,
                 title = "Humidty",
-                subtitle = "31%",
+                subtitle = am.toString()+"%",
                 modifier = Modifier.weight(
                     1f
                 )
@@ -117,6 +130,48 @@ fun InfoTable() {
         }
     }
 }
+
+@Composable
+fun MainInfo(slaveId: String) {
+    var at by remember {
+        mutableStateOf(0f)
+    }
+    val scope = rememberCoroutineScope()
+    LaunchedEffect(key1 = Unit) {
+        fixedRateTimer("observer", startAt = Date(), period = 1000) {
+            scope.launch(Dispatchers.IO) {
+                withTimeout(10000) {
+                    val res = API.getSensorData(slaveId)
+                    val reading = res.getOrNull()
+                    if(reading != null){
+                        at = reading.at
+                    }
+                }
+            }
+        }
+    }
+    Column(
+        modifier = Modifier.padding(top = 24.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Text(text = at.toString()+"°", color = Color.Blue, fontSize = 48.sp, fontWeight = FontWeight.Bold)
+        Text(
+            text = "Bhuli, Dhanbad",
+            color = Color.Blue,
+            fontWeight = FontWeight.Bold,
+            fontSize = 15.sp,
+            modifier = Modifier.padding(top = 16.dp)
+        )
+        Text(
+            text = "Today cloud is clear.\nVery less chance of Rain",
+            color = Color.Black,
+            fontSize = 16.sp,
+            textAlign = TextAlign.Center,
+            modifier = Modifier.padding(vertical = 24.dp)
+        )
+    }
+}
+
 
 
 @Composable
