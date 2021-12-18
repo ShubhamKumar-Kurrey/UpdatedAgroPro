@@ -9,8 +9,3 @@ data class SensorData(
     val sl: Float = 0f
 
 )
-
-data class SunWindData(
-    val sl: Float=0f,
-    val ws: Float=0f
-)

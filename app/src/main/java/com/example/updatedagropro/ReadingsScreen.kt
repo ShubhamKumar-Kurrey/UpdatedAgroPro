@@ -83,13 +83,6 @@ fun Slaves(slave: Slave_Name, slaveId: String) {
     var am by remember {
         mutableStateOf(0f)
     }
-    var ws by remember {
-        mutableStateOf(0f)
-    }
-    var sl by remember {
-        mutableStateOf(0f)
-    }
-
 
     val scope = rememberCoroutineScope()
     LaunchedEffect(key1 = Unit) {
@@ -103,8 +96,6 @@ fun Slaves(slave: Slave_Name, slaveId: String) {
                         at = reading.at
                         sm = reading.sm
                         st = reading.st
-                        ws=reading.ws
-                        sl=reading.sl
 
                     }
                 }

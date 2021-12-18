@@ -26,7 +26,6 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.example.updatedagropro.WindSunAPI.APISW
 import com.example.updatedagropro.network.API
 import com.example.updatedagropro.network.SensorData
 import com.google.accompanist.pager.ExperimentalPagerApi
@@ -196,22 +195,22 @@ fun DetailScreen() {
 
 @Composable
 fun SunWindReading(slaveId: String) {
-    var sl by remember {
+    var ws by remember {
         mutableStateOf(0f)
     }
-    var ws by remember {
+    var sl by remember {
         mutableStateOf(0f)
     }
     val scope = rememberCoroutineScope()
     LaunchedEffect(key1 = Unit) {
         fixedRateTimer("observer", startAt = Date(), period = 1000) {
             scope.launch(Dispatchers.IO) {
-                withTimeout(2000) {
-                    val res = APISW.getSunWindDatavalue(slaveId)
+                withTimeout(1000) {
+                    val res = API.getSensorData(slaveId)
                     val reading = res.getOrNull()
                     if(reading != null){
-                        sl = reading.sl
                         ws = reading.ws
+                        sl = reading.sl
                     }
                 }
             }
