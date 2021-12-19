@@ -4,12 +4,10 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.layout.R
-import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.*
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -27,6 +25,8 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.unit.dp
+import androidx.core.graphics.component1
+import androidx.core.graphics.component2
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -49,7 +49,7 @@ fun ReadingsScreen() {
     Box(
         modifier = Modifier
             .fillMaxSize(1f)
-            .padding(10.dp),
+            .padding(5.dp),
         contentAlignment = Alignment.Center
     ) {
         SwipingScreen()
@@ -57,13 +57,14 @@ fun ReadingsScreen() {
 }
 
 @Composable
-fun Sensor(Value: Float, headingname: String) {
+fun Sensor(Value: Float, headingname: String, symbolType: String) {
     Box() {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
+            verticalArrangement = Arrangement.Center,
+
         ) {
-            circularProgressBar(percentage = Value, number = 1, heading=headingname)
+            textofBar(pe = Value, sn= headingname, sy=symbolType, sv = Value )
             Spacer(modifier = Modifier.padding(5.dp))
         }
     }
@@ -121,9 +122,9 @@ fun Slaves(slave: Slave_Name, slaveId: String) {
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.Top
         ) {
-            Sensor(Value = st,headingname="Soil Temperature")
+            Sensor(Value = st,headingname="Soil Temperature", symbolType = "°C")
             Spacer(modifier = Modifier.padding(horizontal = 25.dp))
-            Sensor(Value = sm, headingname = "Soil Moisture")
+            Sensor(Value = sm, headingname = "Soil Moisture", symbolType="%")
         }
         Row(
             modifier = Modifier
@@ -132,16 +133,16 @@ fun Slaves(slave: Slave_Name, slaveId: String) {
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Sensor(Value = at, headingname = "Air Temperature")
+            Sensor(Value = at, headingname = "Air Temperature", symbolType="°C")
             Spacer(modifier = Modifier.padding(horizontal = 25.dp))
-            Sensor(Value = am, headingname="Humidity")
+            Sensor(Value = am, headingname="Humidity", symbolType="%")
         }
     }
 
 }
 
 
-@Composable
+/*@Composable
 fun circularProgressBar(
     radius: Dp = 50.dp,
     strokeWidth: Dp = 12.dp,
@@ -210,7 +211,7 @@ fun circularProgressBar(
         }
 
     }
-}
+}*/
 
 
 @OptIn(ExperimentalPagerApi::class)
@@ -239,4 +240,3 @@ fun SwipingScreen() {
 
     }
 }
-

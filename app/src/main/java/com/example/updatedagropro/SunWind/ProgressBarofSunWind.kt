@@ -1,13 +1,11 @@
-package com.example.updatedagropro
+package com.example.updatedagropro.SunWind
+
 
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.animateIntAsState
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
@@ -27,24 +25,26 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.updatedagropro.SunWind.backgroundIndicator
 
 
 @Composable
-fun CustomComponent(
-    sensorReadingValue:Float,
+fun circlebarSunWind(
     percentage:Float,
-    canvasSize: Dp = 120.dp,
+    sensorReadingValue:Float,
+    canvasSize: Dp = 200.dp,
     indicatorValue: Int = 0,
     maxIndicatorValue: Int = 100,
     backgroundIndicatorColor: Color = MaterialTheme.colors.onSurface.copy(alpha = 0.1f),
-    backgroundIndicatorStrokeWidth: Float = 45f,
+    backgroundIndicatorStrokeWidth: Float = 80f,
     foregroundIndicatorColor: Color = MaterialTheme.colors.primary,
-    foregroundIndicatorStrokeWidth: Float = 40f,
-    //indicatorStrokeCap: StrokeCap = StrokeCap.Round,
-    bigTextFontSize: TextUnit = 28.sp, //MaterialTheme.typography.h6.fontSize,
+    foregroundIndicatorStrokeWidth: Float = 100f,
+    indicatorStrokeCap: StrokeCap = StrokeCap.Round,
+    bigTextFontSize: TextUnit =  MaterialTheme.typography.h4.fontSize,
     bigTextColor: Color = MaterialTheme.colors.onSurface,
-    symbol: String
+    symbol: String ,
+    sensorName: String ,
+    smallTextFontSize: TextUnit = 15.sp,
+    smallTextColor: Color = MaterialTheme.colors.onSurface.copy(alpha = 1f)
 ) {
     var allowedIndicatorValue by remember {
         mutableStateOf(maxIndicatorValue)
@@ -59,6 +59,9 @@ fun CustomComponent(
     LaunchedEffect(key1 = allowedIndicatorValue) {
         animatedIndicatorValue = allowedIndicatorValue.toFloat()
     }
+
+    //  val percentage =90
+    //(animatedIndicatorValue / maxIndicatorValue) * 100
 
     val sweepAngle by animateFloatAsState(
         targetValue = (2.4 * percentage).toFloat(),
@@ -100,11 +103,14 @@ fun CustomComponent(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        EmbeddedElements(
+        ElementsUsed(
             bigText = receivedValue,
             bigTextFontSize = bigTextFontSize,
             bigTextColor = animatedBigTextColor,
-            bigTextSuffix = symbol
+            bigTextSuffix = symbol,
+            smallText = sensorName,
+            smallTextColor = smallTextColor,
+            smallTextFontSize = smallTextFontSize
         )
     }
 }
@@ -113,7 +119,7 @@ fun DrawScope.backgroundIndicator(
     componentSize: Size,
     indicatorColor: Color,
     indicatorStrokeWidth: Float,
-    indicatorStokeCap: StrokeCap
+//    indicatorStokeCap: StrokeCap
 ) {
     drawArc(
         size = componentSize,
@@ -157,11 +163,14 @@ fun DrawScope.foregroundIndicator(
 }
 
 @Composable
-fun EmbeddedElements(
+fun ElementsUsed(
     bigText: Int,
     bigTextFontSize: TextUnit,
     bigTextColor: Color,
-    bigTextSuffix: String
+    bigTextSuffix: String,
+    smallText: String,
+    smallTextColor: Color,
+    smallTextFontSize: TextUnit
 ) {
 
     Text(
@@ -171,15 +180,11 @@ fun EmbeddedElements(
         textAlign = TextAlign.Center,
         fontWeight = FontWeight.Bold
     )
-}
-
-@Composable
-fun textofBar(sv:Float,pe:Float,sy:String,sn:String) {
-   Column(
-       verticalArrangement = Arrangement.Center,
-       horizontalAlignment = Alignment.CenterHorizontally
-   ){
-       CustomComponent(sensorReadingValue =sv, percentage =pe , symbol = sy )
-       Text(text=sn,color=Color.Blue,fontSize=17.sp,textAlign = TextAlign.Center)
-   }
+    Spacer(modifier = Modifier.padding(vertical = 3.dp))
+    Text(
+        text = smallText,
+        color = smallTextColor,
+        fontSize = smallTextFontSize,
+        textAlign = TextAlign.Center
+    )
 }

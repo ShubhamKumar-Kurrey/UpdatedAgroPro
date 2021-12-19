@@ -26,8 +26,10 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.example.updatedagropro.SunWind.Sun_Wind
 import com.example.updatedagropro.network.API
 import com.example.updatedagropro.network.SensorData
+import com.example.updatedagropro.pHscale.pHsensor
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.HorizontalPagerIndicator
@@ -115,6 +117,13 @@ fun Navigation(navController: NavHostController) {
                 }
             )
         }
+        composable(DrawerScreens.pHsensor.route) {
+            pHsensor(
+                openDrawer = {
+                    openDrawer()
+                }
+            )
+        }
         composable(DrawerScreens.Help.route) {
             Help(
                 navController = navController
@@ -193,94 +202,7 @@ fun DetailScreen() {
     }
 }
 
-@Composable
-fun SunWindReading(slaveId: String) {
-    var ws by remember {
-        mutableStateOf(0f)
-    }
-    var sl by remember {
-        mutableStateOf(0f)
-    }
-    val scope = rememberCoroutineScope()
-    LaunchedEffect(key1 = Unit) {
-        fixedRateTimer("observer", startAt = Date(), period = 1000) {
-            scope.launch(Dispatchers.IO) {
-                withTimeout(1000) {
-                    val res = API.getSensorData(slaveId)
-                    val reading = res.getOrNull()
-                    if(reading != null){
-                        ws = reading.ws
-                        sl = reading.sl
-                    }
-                }
-            }
-
-        }
-    }
-
-    Column(
-        modifier = Modifier
-            .fillMaxWidth(1f)
-            .padding(horizontal = 10.dp),
-        verticalArrangement = Arrangement.Top,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-
-        Text(text = "Sun & Wind", fontSize = 30.sp, fontWeight = FontWeight.Bold, color = Color.Blue)
-
-        Sensor(Value = sl,headingname="Sun Light")
-        Spacer(modifier = Modifier.padding(horizontal = 25.dp))
-        Sensor(Value = ws, headingname = "Wind Speed")
-    }
-
-}
 
 
 
-@OptIn(ExperimentalPagerApi::class)
-@Composable
-fun Sun_Wind() {
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(color = Color.White),
-        contentAlignment = Alignment.Center
-    ) {
-        Box(
-            modifier = Modifier
-                .fillMaxSize(1f)
-                .padding(10.dp),
-            contentAlignment = Alignment.Center
-        ) {
-            ScreenWindSun()
-        }
-    }
-}
 
-
-@OptIn(ExperimentalPagerApi::class)
-@ExperimentalPagerApi // 1.
-@Composable
-fun ScreenWindSun() {
-
-    val pageState = rememberPagerState()
-
-    Column {
-
-        HorizontalPager(
-            count = 1,
-            state = pageState,
-            modifier = Modifier
-                .fillMaxSize(1f)
-        ) { exer ->
-            SunWindReading(exer.toString())
-        }
-        HorizontalPagerIndicator(
-            pagerState = pageState,
-            modifier = Modifier
-                .align(Alignment.CenterHorizontally)
-                .padding(20.dp)
-        )
-
-    }
-}
