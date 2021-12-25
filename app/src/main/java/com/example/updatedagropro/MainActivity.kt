@@ -3,15 +3,8 @@ package com.example.updatedagropro
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.navigation.NavHostController
-import com.example.updatedagropro.SunWind.SunWindReading
+import com.example.updatedagropro.pHscale.circularProgressBar
+import com.example.updatedagropro.pHscale.pHcircularBar
 import com.example.updatedagropro.ui.theme.UpdatedAgroProTheme
 
 class MainActivity : ComponentActivity() {
@@ -20,7 +13,8 @@ class MainActivity : ComponentActivity() {
         setContent {
             UpdatedAgroProTheme {
                AppMainScreen()
-               // SunWindReading(slaveId = 1.toString())
+            // circularProgressBar(percentage = 11f, heading = "pH", number = 1)
+             //   pHcircularBar(percentage = 13f, sensorReadingValue = 13f, symbol = "pH", sensorName = "pH Sensor")
             }
         }
     }

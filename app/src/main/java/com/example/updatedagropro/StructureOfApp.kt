@@ -9,6 +9,7 @@ import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.key.Key.Companion.Notification
 import androidx.compose.ui.res.painterResource
@@ -47,45 +48,44 @@ import kotlin.concurrent.timerTask
 @Composable
 fun AppMainScreen() {
     val navController1 = rememberNavController()
-    Surface(color = MaterialTheme.colors.background) {
-        val drawerState = rememberDrawerState(DrawerValue.Closed)
-        val scope = rememberCoroutineScope()
-        val openDrawer = {
-            scope.launch {
-                drawerState.open()
+        Surface(color = Color(0xFF35207B)) {
+            val drawerState = rememberDrawerState(DrawerValue.Closed)
+            val scope = rememberCoroutineScope()
+            val openDrawer = {
+                scope.launch {
+                    drawerState.open()
+                }
             }
-        }
-        ModalDrawer(
-            drawerState = drawerState,
-            gesturesEnabled = drawerState.isOpen,
-            drawerContent = {
-                Drawer(
-                    onDestinationClicked = { route ->
-                        scope.launch {
-                            drawerState.close()
-                        }
-                        navController1.navigate(route) {
-                            popUpTo = navController1.graph.startDestinationId
-                            launchSingleTop = true
-                        }
-                    }
-                )
-            }
-        ) {
-            NavHost(
-                navController = navController1
-                ,startDestination = DrawerScreens.Home.route
-            ) {
-                composable(DrawerScreens.Home.route) {
-                    Home(
-                        openDrawer = {
-                            openDrawer()
+            ModalDrawer(
+                drawerState = drawerState,
+                gesturesEnabled = drawerState.isOpen,
+                drawerContent = {
+                    Drawer(
+                        onDestinationClicked = { route ->
+                            scope.launch {
+                                drawerState.close()
+                            }
+                            navController1.navigate(route) {
+                                popUpTo = navController1.graph.startDestinationId
+                                launchSingleTop = true
+                            }
                         }
                     )
                 }
+            ) {
+                NavHost(
+                    navController = navController1, startDestination = DrawerScreens.Home.route
+                ) {
+                    composable(DrawerScreens.Home.route) {
+                        Home(
+                            openDrawer = {
+                                openDrawer()
+                            }
+                        )
+                    }
+                }
             }
         }
-    }
 }
 
 
@@ -141,7 +141,7 @@ fun BottomNavBadges(
 ) {
     val backStackEntry = navController.currentBackStackEntryAsState()
     BottomNavigation(
-        backgroundColor = Color.Blue,
+        backgroundColor = Color(0xFF6346A1),
         elevation = 5.dp
     ) {
         items.forEach { item ->
@@ -149,8 +149,8 @@ fun BottomNavBadges(
             BottomNavigationItem(
                 selected = selected,
                 onClick = { onItemClick(item) },
-                selectedContentColor = Color.Green,
-                unselectedContentColor = Color.White,
+                selectedContentColor = Color(0xFFF7DDF6),
+                unselectedContentColor = Color(0xFF35207B),
                 icon = {
 
                     Column(

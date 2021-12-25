@@ -1,15 +1,11 @@
-package com.example.updatedagropro
+package com.example.updatedagropro.pHscale
 
-import android.view.RoundedCorner
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.animateIntAsState
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.MaterialTheme.colors
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -18,36 +14,34 @@ import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.StrokeCap
-import androidx.compose.ui.graphics.SweepGradientShader
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.updatedagropro.SunWind.backgroundIndicator
-
 
 @Composable
-fun CustomComponent(
-    sensorReadingValue:Float,
+fun pHcircularBar(
     percentage:Float,
-    canvasSize: Dp = 120.dp,
+    sensorReadingValue:Float,
+    canvasSize: Dp = 200.dp,
     indicatorValue: Int = 0,
     maxIndicatorValue: Int = 100,
-    backgroundIndicatorColor: Color = Color(0xFFF7DDF6),
-    backgroundIndicatorStrokeWidth: Float = 35f,
-    foregroundIndicatorColor:  Color= Color.Blue,
-    foregroundIndicatorStrokeWidth: Float = 40f,
-    //indicatorStrokeCap: StrokeCap = StrokeCap.Round,
-    bigTextFontSize: TextUnit = 28.sp, //MaterialTheme.typography.h6.fontSize,
-    bigTextColor: Color = Color(0xFFF7DDF6),
-    symbol: String
+    backgroundIndicatorColor: Color = MaterialTheme.colors.onSurface.copy(alpha = 0.1f),
+    backgroundIndicatorStrokeWidth: Float = 70f,
+    foregroundIndicatorColor: Color = MaterialTheme.colors.primary,
+    foregroundIndicatorStrokeWidth: Float = 70f,
+    indicatorStrokeCap: StrokeCap = StrokeCap.Round,
+    bigTextFontSize: TextUnit =  MaterialTheme.typography.h4.fontSize,
+    bigTextColor: Color = MaterialTheme.colors.onSurface,
+    symbol: String,
+    sensorName: String,
+    smallTextFontSize: TextUnit = 15.sp,
+    smallTextColor: Color = MaterialTheme.colors.onSurface.copy(alpha = 1f)
 ) {
     var allowedIndicatorValue by remember {
         mutableStateOf(maxIndicatorValue)
@@ -63,8 +57,11 @@ fun CustomComponent(
         animatedIndicatorValue = allowedIndicatorValue.toFloat()
     }
 
+    //  val percentage =90
+    //(animatedIndicatorValue / maxIndicatorValue) * 100
+
     val sweepAngle by animateFloatAsState(
-        targetValue = (180*0.0769230769230 * percentage).toFloat(),
+        targetValue = (180* 0.0769230769230 * percentage).toFloat(),
         animationSpec = tween(1000)
     )
 
@@ -84,8 +81,6 @@ fun CustomComponent(
     Column(
         modifier = Modifier
             .size(canvasSize)
-            .fillMaxWidth(0.4f)
-            .fillMaxHeight(0.27f)
             .drawBehind {
                 val componentSize = size / 1.25f
                 backgroundIndicator(
@@ -105,11 +100,14 @@ fun CustomComponent(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        EmbeddedElements(
+        pHelementsUsed(
             bigText = receivedValue,
             bigTextFontSize = bigTextFontSize,
             bigTextColor = animatedBigTextColor,
-            bigTextSuffix = symbol
+            bigTextSuffix = symbol,
+            smallText = sensorName,
+            smallTextColor = smallTextColor,
+            smallTextFontSize = smallTextFontSize
         )
     }
 }
@@ -118,13 +116,13 @@ fun DrawScope.backgroundIndicator(
     componentSize: Size,
     indicatorColor: Color,
     indicatorStrokeWidth: Float,
-    indicatorStokeCap: StrokeCap
+//    indicatorStokeCap: StrokeCap
 ) {
     drawArc(
         size = componentSize,
         color = indicatorColor,
-        startAngle = 150f,
-        sweepAngle = 240f,
+        startAngle = 180f,
+        sweepAngle = 180f,
         useCenter = false,
         style = Stroke(
             width = indicatorStrokeWidth,
@@ -162,11 +160,14 @@ fun DrawScope.foregroundIndicator(
 }
 
 @Composable
-fun EmbeddedElements(
+fun pHelementsUsed(
     bigText: Int,
     bigTextFontSize: TextUnit,
     bigTextColor: Color,
-    bigTextSuffix: String
+    bigTextSuffix: String,
+    smallText: String,
+    smallTextColor: Color,
+    smallTextFontSize: TextUnit
 ) {
 
     Text(
@@ -176,19 +177,11 @@ fun EmbeddedElements(
         textAlign = TextAlign.Center,
         fontWeight = FontWeight.Bold
     )
-}
-
-@Composable
-fun textofBar(sv:Float,pe:Float,sy:String,sn:String) {
-    //Box(modifier=Modifier.background(color= Color(0xFF6346A1))
-     //   .fillMaxWidth(0.4f).fillMaxHeight(0.25f)
-    //) {
-        Column(
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            CustomComponent(sensorReadingValue = sv, percentage = pe, symbol = sy)
-            Text(text = sn, color = Color.White, fontSize = 17.sp, textAlign = TextAlign.Center)
-        }
-  //  }
+    Spacer(modifier = Modifier.padding(vertical = 3.dp))
+    Text(
+        text = smallText,
+        color = smallTextColor,
+        fontSize = smallTextFontSize,
+        textAlign = TextAlign.Center
+    )
 }

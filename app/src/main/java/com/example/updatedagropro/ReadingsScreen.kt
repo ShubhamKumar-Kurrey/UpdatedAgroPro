@@ -49,10 +49,10 @@ fun ReadingsScreen() {
     Box(
         modifier = Modifier
             .fillMaxSize(1f)
-            .padding(5.dp),
+            .background(Color(0xFF35207B)),
         contentAlignment = Alignment.Center
     ) {
-        SwipingScreen()
+        SwipingScreen(Modifier.background(Color(0xFF35207B)))
     }
 }
 
@@ -113,7 +113,7 @@ fun Slaves(slave: Slave_Name, slaveId: String) {
         verticalArrangement = Arrangement.Top
     ) {
 
-        Text(text = slave.name, fontSize = 30.sp, fontWeight = FontWeight.Bold, color = Color.Blue)
+        Text(text = slave.name, fontSize = 30.sp, fontWeight = FontWeight.Bold, color = Color.White)
 
         Row(
             modifier = Modifier
@@ -217,17 +217,18 @@ fun circularProgressBar(
 @OptIn(ExperimentalPagerApi::class)
 @ExperimentalPagerApi // 1.
 @Composable
-fun SwipingScreen() {
+fun SwipingScreen(
+     modifier : Modifier
+) {
 
     val pageState = rememberPagerState()
 
-    Column {
-
+    Column() {
         HorizontalPager(
-            count = 4,
-            state = pageState,
             modifier = Modifier
-                .fillMaxSize(1f)
+                .fillMaxSize(1f).background(color=Color(0xFF35207B)),
+            count = 4,
+            state = pageState
         ) { page ->
             Slaves(slave = dataList[page], (page + 1).toString())
         }
