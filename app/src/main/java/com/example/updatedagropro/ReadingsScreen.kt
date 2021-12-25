@@ -49,10 +49,10 @@ fun ReadingsScreen() {
     Box(
         modifier = Modifier
             .fillMaxSize(1f)
-            .background(Color(0xFF35207B)),
+            .background(Color(0xFFFBFAFD)),
         contentAlignment = Alignment.Center
     ) {
-        SwipingScreen(Modifier.background(Color(0xFF35207B)))
+        SwipingScreen(Modifier.background(Color(0xFFFEFDFF)))
     }
 }
 
@@ -226,7 +226,7 @@ fun SwipingScreen(
     Column() {
         HorizontalPager(
             modifier = Modifier
-                .fillMaxSize(1f).background(color=Color(0xFF35207B)),
+                .fillMaxSize(1f).background(color=Color(0xFF000000)),
             count = 4,
             state = pageState
         ) { page ->

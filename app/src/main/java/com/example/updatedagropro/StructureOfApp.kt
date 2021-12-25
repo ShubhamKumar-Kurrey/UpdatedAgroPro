@@ -48,7 +48,7 @@ import kotlin.concurrent.timerTask
 @Composable
 fun AppMainScreen() {
     val navController1 = rememberNavController()
-        Surface(color = Color(0xFF35207B)) {
+        Surface(color = Color(0xFFA188F5)) {
             val drawerState = rememberDrawerState(DrawerValue.Closed)
             val scope = rememberCoroutineScope()
             val openDrawer = {
