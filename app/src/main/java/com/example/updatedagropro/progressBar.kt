@@ -41,12 +41,13 @@ fun CustomComponent(
     indicatorValue: Int = 0,
     maxIndicatorValue: Int = 100,
     backgroundIndicatorColor: Color = Color(0xFFF7DDF6),
-    backgroundIndicatorStrokeWidth: Float = 35f,
+    backgroundIndicatorStrokeWidth: Float = 20f,
     foregroundIndicatorColor:  Color= Color.Blue,
-    foregroundIndicatorStrokeWidth: Float = 40f,
+    foregroundIndicatorStrokeWidth: Float = 25f,
     //indicatorStrokeCap: StrokeCap = StrokeCap.Round,
     bigTextFontSize: TextUnit = 28.sp, //MaterialTheme.typography.h6.fontSize,
     bigTextColor: Color = Color(0xFFF7DDF6),
+    bigTextClose: Color= Color(0xFF9C9C9C),
     symbol: String
 ) {
     var allowedIndicatorValue by remember {
@@ -64,7 +65,7 @@ fun CustomComponent(
     }
 
     val sweepAngle by animateFloatAsState(
-        targetValue = (180*0.0769230769230 * percentage).toFloat(),
+        targetValue = (2.4 * percentage).toFloat(),
         animationSpec = tween(1000)
     )
 
@@ -74,18 +75,17 @@ fun CustomComponent(
     )
 
     val animatedBigTextColor by animateColorAsState(
-        targetValue = if (percentage >0.05f)
-            MaterialTheme.colors.onSurface.copy(alpha = 0.3f)
+        targetValue = if (percentage >0f)
+          //  MaterialTheme.colors.onSurface.copy(alpha = 0.3f)
+              bigTextColor
         else
-            bigTextColor,
+            bigTextClose,
         animationSpec = tween(1000)
     )
 
     Column(
         modifier = Modifier
             .size(canvasSize)
-            .fillMaxWidth(0.4f)
-            .fillMaxHeight(0.27f)
             .drawBehind {
                 val componentSize = size / 1.25f
                 backgroundIndicator(
