@@ -8,10 +8,12 @@ import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.layout.R
 import androidx.compose.foundation.lazy.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
@@ -49,10 +51,10 @@ fun ReadingsScreen() {
     Box(
         modifier = Modifier
             .fillMaxSize(1f)
-            .background(Color(0xFFFBFAFD)),
+            .background(Color(0xFFE6E6E6)),
         contentAlignment = Alignment.Center
     ) {
-        SwipingScreen(Modifier.background(Color(0xFFFEFDFF)))
+        SwipingScreen(Modifier.background(Color(0xFFE2DCF5)))
     }
 }
 
@@ -65,7 +67,7 @@ fun Sensor(Value: Float, headingname: String, symbolType: String) {
 
         ) {
             textofBar(pe = Value, sn= headingname, sy=symbolType, sv = Value )
-            Spacer(modifier = Modifier.padding(5.dp))
+            //Spacer(modifier = Modifier.padding(5.dp))
         }
     }
 }
@@ -107,111 +109,87 @@ fun Slaves(slave: Slave_Name, slaveId: String) {
 
     Column(
         modifier = Modifier
+            .padding(horizontal = 25.dp)
+            .padding(vertical=40.dp)
             .fillMaxWidth(1f)
-            .padding(horizontal = 10.dp),
+            .fillMaxHeight(1f),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Top
     ) {
-
         Text(text = slave.name, fontSize = 30.sp, fontWeight = FontWeight.Bold, color = Color.White)
-
+        Spacer(modifier = Modifier.padding(vertical = 15.dp))
         Row(
+            horizontalArrangement = Arrangement.SpaceAround,
+            verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
-                .padding(40.dp)
-                .fillMaxWidth(1f),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.Top
+                .fillMaxWidth(1f)
         ) {
-            Sensor(Value = st,headingname="Soil Temperature", symbolType = "°C")
-            Spacer(modifier = Modifier.padding(horizontal = 25.dp))
-            Sensor(Value = sm, headingname = "Soil Moisture", symbolType="%")
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(0.5f)
+                    .wrapContentHeight()
+                    .clip(RoundedCornerShape(16.dp))
+                    .background(Color(0xFF120A83))
+                    .clickable { //navController.navigate(Screen.DetailsScreen.route)
+                    }
+            ) {
+                Sensor(Value = st, headingname = "Soil Temperature", symbolType = "°C")
+            }
+            Spacer(modifier = Modifier.width(16.dp))
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(0.5f)
+                    .wrapContentHeight()
+                    .clip(RoundedCornerShape(16.dp))
+                    .background(Color(0xFF120A83))
+                    .clickable { //navController.navigate(Screen.DetailsScreen.route)
+                    }
+            ) {
+                Sensor(Value = sm, headingname = "Soil Moisture", symbolType = "%")
+            }
         }
+        Spacer(modifier = Modifier.padding(vertical = 30.dp))
         Row(
             modifier = Modifier
-                .padding(40.dp)
                 .fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Sensor(Value = at, headingname = "Air Temperature", symbolType="°C")
-            Spacer(modifier = Modifier.padding(horizontal = 25.dp))
-            Sensor(Value = am, headingname="Humidity", symbolType="%")
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(0.5f)
+                    .wrapContentHeight()
+                    .clip(RoundedCornerShape(16.dp))
+                    .background(Color(0xFF120A83))
+                    .clickable { //navController.navigate(Screen.DetailsScreen.route)
+                    }
+            )
+            {
+                Sensor(Value = at, headingname = "Air Temperature", symbolType = "°C")
+            }
+            Spacer(modifier = Modifier.width(16.dp))
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(0.5f)
+                    .wrapContentHeight()
+                    .clip(RoundedCornerShape(16.dp))
+                    .background(Color(0xFF120A83))
+                    .clickable { //navController.navigate(Screen.DetailsScreen.route)
+                    }
+            )
+            {
+                Sensor(Value = am, headingname = "Humidity", symbolType = "%")
+            }
         }
     }
 
 }
 
 
-/*@Composable
-fun circularProgressBar(
-    radius: Dp = 50.dp,
-    strokeWidth: Dp = 12.dp,
-    percentage: Float,
-    color: Color = if (percentage >= 20f && percentage <= 45f) {
-        Color.Blue
-    } else if (percentage < 20f) {
-        Color.Red
-    } else if (percentage > 70f) {
-        Color.Red
-    } else if (percentage <= 70f && percentage >= 60) {
-        Color.Blue
-    } else {
-        Color.Green
-    },
-    heading:String,
-    number: Int,
-    fontSize: TextUnit = 28.sp,
-    animeDuration: Int = 1000,
-    animDelay: Int = 0
-) {
-    var animationPlayed by remember {
-        mutableStateOf(false)
-    }
-    val curPercentage = animateFloatAsState(
-        targetValue = if (animationPlayed) percentage else 0f,
-        animationSpec = tween(
-            durationMillis = animeDuration,
-            delayMillis = animDelay
-        )
-    )
-    LaunchedEffect(key1 = true) {
-        animationPlayed = true
-    }
-    Box(
-        contentAlignment = Alignment.Center,
-        modifier = Modifier.size(radius * 2f)
-    ) {
-        Canvas(modifier = Modifier.size(radius * 2f)) {
-            drawArc(
-                color = color,
-                 150f,
-                 2.4f*curPercentage.value,
-                useCenter = false,
-                style = Stroke(
-                    strokeWidth.toPx(),
-                    cap = StrokeCap.Round
-                )
-            )
-        }
-        val valuenumber = curPercentage.value * number
-        Column(horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center) {
-            Text(
-                text = heading,
-                color = Color.Black,
-                fontSize = 12.sp,
-                fontWeight = FontWeight.Bold
-            )
-            Text(
-                text = valuenumber.toInt().toString(),
-                color = Color.Black,
-                fontSize = fontSize,
-                fontWeight = FontWeight.Bold
-            )
-        }
-
-    }
-}*/
 
 
 @OptIn(ExperimentalPagerApi::class)
@@ -226,7 +204,7 @@ fun SwipingScreen(
     Column() {
         HorizontalPager(
             modifier = Modifier
-                .fillMaxSize(1f).background(color=Color(0xFF000000)),
+                .fillMaxSize(1f).background(color=Color(0xFF35207B)),
             count = 4,
             state = pageState
         ) { page ->

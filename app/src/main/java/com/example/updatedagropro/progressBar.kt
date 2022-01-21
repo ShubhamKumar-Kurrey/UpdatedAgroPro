@@ -37,7 +37,7 @@ import com.example.updatedagropro.SunWind.backgroundIndicator
 fun CustomComponent(
     sensorReadingValue:Float,
     percentage:Float,
-    canvasSize: Dp = 120.dp,
+    canvasSize: Dp = 160.dp,
     indicatorValue: Int = 0,
     maxIndicatorValue: Int = 100,
     backgroundIndicatorColor: Color = Color(0xFFF7DDF6),
@@ -184,7 +184,7 @@ fun textofBar(sv:Float,pe:Float,sy:String,sn:String) {
      //   .fillMaxWidth(0.4f).fillMaxHeight(0.25f)
     //) {
         Column(
-            verticalArrangement = Arrangement.Center,
+            verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             CustomComponent(sensorReadingValue = sv, percentage = pe, symbol = sy)

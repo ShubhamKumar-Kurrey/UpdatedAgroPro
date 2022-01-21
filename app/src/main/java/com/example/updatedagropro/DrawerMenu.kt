@@ -135,8 +135,7 @@ fun Home(openDrawer: () -> Unit) {
 
     ) {
         ModalDrawer(modifier = Modifier
-            .fillMaxSize()
-            ,
+            .fillMaxSize(),
             drawerState = drawerState,
             gesturesEnabled = drawerState.isOpen,
             drawerContent = {
