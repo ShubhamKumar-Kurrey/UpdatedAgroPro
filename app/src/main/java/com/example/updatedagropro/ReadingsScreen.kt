@@ -51,7 +51,7 @@ fun ReadingsScreen() {
     Box(
         modifier = Modifier
             .fillMaxSize(1f)
-            .background(Color(0xFFE6E6E6)),
+            .background(Color(0xFF808080)),
         contentAlignment = Alignment.Center
     ) {
         SwipingScreen(Modifier.background(Color(0xFFE2DCF5)))
@@ -60,7 +60,9 @@ fun ReadingsScreen() {
 
 @Composable
 fun Sensor(Value: Float, headingname: String, symbolType: String) {
-    Box() {
+    Box(
+
+    ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center,
@@ -116,7 +118,7 @@ fun Slaves(slave: Slave_Name, slaveId: String) {
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Top
     ) {
-        Text(text = slave.name, fontSize = 30.sp, fontWeight = FontWeight.Bold, color = Color.White)
+        Text(text = slave.name, fontSize = 30.sp, fontWeight = FontWeight.Bold, color = Color(0xFF1AA57B))
         Spacer(modifier = Modifier.padding(vertical = 15.dp))
         Row(
             horizontalArrangement = Arrangement.SpaceAround,
@@ -130,7 +132,7 @@ fun Slaves(slave: Slave_Name, slaveId: String) {
                     .weight(0.5f)
                     .wrapContentHeight()
                     .clip(RoundedCornerShape(16.dp))
-                    .background(Color(0xFF120A83))
+                    .background(Color(0xFFFFFFFF))
                     .clickable { //navController.navigate(Screen.DetailsScreen.route)
                     }
             ) {
@@ -143,14 +145,14 @@ fun Slaves(slave: Slave_Name, slaveId: String) {
                     .weight(0.5f)
                     .wrapContentHeight()
                     .clip(RoundedCornerShape(16.dp))
-                    .background(Color(0xFF120A83))
+                    .background(Color(0xFFFFFFFF))
                     .clickable { //navController.navigate(Screen.DetailsScreen.route)
                     }
             ) {
                 Sensor(Value = sm, headingname = "Soil Moisture", symbolType = "%")
             }
         }
-        Spacer(modifier = Modifier.padding(vertical = 30.dp))
+        Spacer(modifier = Modifier.padding(vertical = 18.dp))
         Row(
             modifier = Modifier
                 .fillMaxWidth(),
@@ -163,7 +165,7 @@ fun Slaves(slave: Slave_Name, slaveId: String) {
                     .weight(0.5f)
                     .wrapContentHeight()
                     .clip(RoundedCornerShape(16.dp))
-                    .background(Color(0xFF120A83))
+                    .background(Color(0xFFFFFFFF))
                     .clickable { //navController.navigate(Screen.DetailsScreen.route)
                     }
             )
@@ -177,7 +179,7 @@ fun Slaves(slave: Slave_Name, slaveId: String) {
                     .weight(0.5f)
                     .wrapContentHeight()
                     .clip(RoundedCornerShape(16.dp))
-                    .background(Color(0xFF120A83))
+                    .background(Color(0xFFFFFFFF))
                     .clickable { //navController.navigate(Screen.DetailsScreen.route)
                     }
             )
@@ -204,7 +206,7 @@ fun SwipingScreen(
     Column() {
         HorizontalPager(
             modifier = Modifier
-                .fillMaxSize(1f).background(color=Color(0xFF35207B)),
+                .fillMaxSize(1f).background(color=Color(0xFFF8F8F8)),
             count = 4,
             state = pageState
         ) { page ->

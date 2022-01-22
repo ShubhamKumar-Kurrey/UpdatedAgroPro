@@ -3,12 +3,14 @@ package com.example.updatedagropro
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.key.Key.Companion.Notification
@@ -141,7 +143,8 @@ fun BottomNavBadges(
 ) {
     val backStackEntry = navController.currentBackStackEntryAsState()
     BottomNavigation(
-        backgroundColor = Color(0xFF6346A1),
+        modifier=Modifier.clip(RoundedCornerShape(50.dp)),
+        backgroundColor = Color(0xFFFFFFFF),
         elevation = 5.dp
     ) {
         items.forEach { item ->
@@ -149,8 +152,8 @@ fun BottomNavBadges(
             BottomNavigationItem(
                 selected = selected,
                 onClick = { onItemClick(item) },
-                selectedContentColor = Color(0xFFF7DDF6),
-                unselectedContentColor = Color(0xFF35207B),
+                selectedContentColor = Color(0xFF1AB68A),
+                unselectedContentColor = Color(0xFFF8F8F8),
                 icon = {
 
                     Column(

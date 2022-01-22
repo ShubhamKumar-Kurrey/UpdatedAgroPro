@@ -85,7 +85,7 @@ fun TopBar(title: String = "", buttonIcon: ImageVector, onButtonClicked: () -> U
                 )
             }
         },
-        backgroundColor = Color(0xFF35207B)
+        backgroundColor = Color(0xFF00A57F)
     )
 }
 

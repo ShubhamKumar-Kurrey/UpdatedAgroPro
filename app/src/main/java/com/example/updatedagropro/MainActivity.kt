@@ -13,8 +13,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             UpdatedAgroProTheme {
                AppMainScreen()
-            // circularProgressBar(percentage = 11f, heading = "pH", number = 1)
-             //   pHcircularBar(percentage = 13f, sensorReadingValue = 13f, symbol = "pH", sensorName = "pH Sensor")
+
             }
         }
     }
