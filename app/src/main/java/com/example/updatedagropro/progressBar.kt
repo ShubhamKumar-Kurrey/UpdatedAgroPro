@@ -40,14 +40,14 @@ fun CustomComponent(
     canvasSize: Dp = 160.dp,
     indicatorValue: Int = 0,
     maxIndicatorValue: Int = 100,
-    backgroundIndicatorColor: Color = Color(0xFFF7DDF6),
+    backgroundIndicatorColor: Color = Color(0xFFF8F8F8),
     backgroundIndicatorStrokeWidth: Float = 20f,
-    foregroundIndicatorColor:  Color= Color.Blue,
+    foregroundIndicatorColor:  Color= Color(0xFF1AA57B),
     foregroundIndicatorStrokeWidth: Float = 25f,
     //indicatorStrokeCap: StrokeCap = StrokeCap.Round,
     bigTextFontSize: TextUnit = 28.sp, //MaterialTheme.typography.h6.fontSize,
-    bigTextColor: Color = Color(0xFFF7DDF6),
-    bigTextClose: Color= Color(0xFF9C9C9C),
+    bigTextColor: Color = Color(0xFF1AA57B),
+    bigTextClose: Color= Color(0xFF1AB68A),
     symbol: String
 ) {
     var allowedIndicatorValue by remember {
@@ -188,7 +188,7 @@ fun textofBar(sv:Float,pe:Float,sy:String,sn:String) {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             CustomComponent(sensorReadingValue = sv, percentage = pe, symbol = sy)
-            Text(text = sn, color = Color.White, fontSize = 17.sp, textAlign = TextAlign.Center)
+            Text(text = sn, color = Color(0xFF1AA57B), fontSize = 17.sp, textAlign = TextAlign.Center)
         }
   //  }
 }
