@@ -153,7 +153,7 @@ fun BottomNavBadges(
                 selected = selected,
                 onClick = { onItemClick(item) },
                 selectedContentColor = Color(0xFF1AB68A),
-                unselectedContentColor = Color(0xFFF8F8F8),
+                unselectedContentColor = Color(0xFFCCCCCC),
                 icon = {
 
                     Column(

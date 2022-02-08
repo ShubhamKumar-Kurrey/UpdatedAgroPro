@@ -184,11 +184,12 @@ fun textofBar(sv:Float,pe:Float,sy:String,sn:String) {
      //   .fillMaxWidth(0.4f).fillMaxHeight(0.25f)
     //) {
         Column(
+            modifier=Modifier.padding(6.dp),
             verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             CustomComponent(sensorReadingValue = sv, percentage = pe, symbol = sy)
-            Text(text = sn, color = Color(0xFF1AA57B), fontSize = 17.sp, textAlign = TextAlign.Center)
+            Text(text = sn, color = Color(0xFF1AA57B), fontSize = 24.sp, textAlign = TextAlign.Center)
         }
   //  }
 }

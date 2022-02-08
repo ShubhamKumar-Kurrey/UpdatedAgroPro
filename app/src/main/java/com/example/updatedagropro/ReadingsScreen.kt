@@ -51,10 +51,10 @@ fun ReadingsScreen() {
     Box(
         modifier = Modifier
             .fillMaxSize(1f)
-            .background(Color(0xFF808080)),
+            .background(Color(0xFFFFFFFF)),
         contentAlignment = Alignment.Center
     ) {
-        SwipingScreen(Modifier.background(Color(0xFFE2DCF5)))
+        SwipingScreen(Modifier.background(Color(0xFFFFFFFF)))
     }
 }
 
@@ -112,13 +112,12 @@ fun Slaves(slave: Slave_Name, slaveId: String) {
     Column(
         modifier = Modifier
             .padding(horizontal = 25.dp)
-            .padding(vertical=40.dp)
-            .fillMaxWidth(1f)
-            .fillMaxHeight(1f),
+            .padding(top=30.dp)
+            .fillMaxSize(1f),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Top
     ) {
-        Text(text = slave.name, fontSize = 30.sp, fontWeight = FontWeight.Bold, color = Color(0xFF1AA57B))
+        Text(text = slave.name, fontSize = 30.sp, fontWeight = FontWeight.Bold, color = Color(0xFF1AB68A))
         Spacer(modifier = Modifier.padding(vertical = 15.dp))
         Row(
             horizontalArrangement = Arrangement.SpaceAround,
@@ -128,9 +127,9 @@ fun Slaves(slave: Slave_Name, slaveId: String) {
         ) {
             Box(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .weight(0.5f)
-                    .wrapContentHeight()
+                    .fillMaxWidth(0.48f)
+                    //.weight(0.5f)
+                    .fillMaxHeight(0.4f)
                     .clip(RoundedCornerShape(16.dp))
                     .background(Color(0xFFFFFFFF))
                     .clickable { //navController.navigate(Screen.DetailsScreen.route)
@@ -141,9 +140,10 @@ fun Slaves(slave: Slave_Name, slaveId: String) {
             Spacer(modifier = Modifier.width(16.dp))
             Box(
                 modifier = Modifier
-                    .fillMaxWidth()
+                    .fillMaxWidth(0.48f)
                     .weight(0.5f)
-                    .wrapContentHeight()
+                    .fillMaxHeight(0.4f)
+                   // .wrapContentHeight()
                     .clip(RoundedCornerShape(16.dp))
                     .background(Color(0xFFFFFFFF))
                     .clickable { //navController.navigate(Screen.DetailsScreen.route)
@@ -152,7 +152,7 @@ fun Slaves(slave: Slave_Name, slaveId: String) {
                 Sensor(Value = sm, headingname = "Soil Moisture", symbolType = "%")
             }
         }
-        Spacer(modifier = Modifier.padding(vertical = 18.dp))
+        Spacer(modifier = Modifier.padding(vertical = 25.dp))
         Row(
             modifier = Modifier
                 .fillMaxWidth(),
@@ -161,9 +161,10 @@ fun Slaves(slave: Slave_Name, slaveId: String) {
         ) {
             Box(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .weight(0.5f)
-                    .wrapContentHeight()
+                    .fillMaxWidth(0.48f)
+                    //.weight(0.5f)
+                    .fillMaxHeight(0.75f)
+                    //.wrapContentHeight()
                     .clip(RoundedCornerShape(16.dp))
                     .background(Color(0xFFFFFFFF))
                     .clickable { //navController.navigate(Screen.DetailsScreen.route)
@@ -175,9 +176,10 @@ fun Slaves(slave: Slave_Name, slaveId: String) {
             Spacer(modifier = Modifier.width(16.dp))
             Box(
                 modifier = Modifier
-                    .fillMaxWidth()
+                    .fillMaxWidth(0.48f)
                     .weight(0.5f)
-                    .wrapContentHeight()
+                    .fillMaxHeight(0.75f)
+                   // .wrapContentHeight()
                     .clip(RoundedCornerShape(16.dp))
                     .background(Color(0xFFFFFFFF))
                     .clickable { //navController.navigate(Screen.DetailsScreen.route)
@@ -206,7 +208,7 @@ fun SwipingScreen(
     Column() {
         HorizontalPager(
             modifier = Modifier
-                .fillMaxSize(1f).background(color=Color(0xFFF8F8F8)),
+                .fillMaxSize(1f).background(color=Color(0xFFE6E6E6)),
             count = 4,
             state = pageState
         ) { page ->
