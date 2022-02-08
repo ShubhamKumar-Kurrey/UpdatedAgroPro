@@ -153,7 +153,7 @@ fun BottomNavBadges(
                 selected = selected,
                 onClick = { onItemClick(item) },
                 selectedContentColor = Color(0xFF1AB68A),
-                unselectedContentColor = Color(0xFFCCCCCC),
+                unselectedContentColor = Color(0xFFE0DDDD),
                 icon = {
 
                     Column(
@@ -181,27 +181,31 @@ fun BottomNavBadges(
 
 @Composable
 fun DetailScreen() {
-    var data by remember {
-        mutableStateOf<Result<SensorData>>(Result.failure(Exception("Initial")))
-    }
-
-    val scope = rememberCoroutineScope()
-    LaunchedEffect(key1 = Unit) {
-        fixedRateTimer("observer", startAt = Date(), period = 1000) {
-            scope.launch(Dispatchers.IO) { withTimeout(2000) { data = API.getSensorData("1") }}
+    Box(
+       modifier= Modifier.background(color=Color(0xFFF3F3F3))
+    ) {
+        var data by remember {
+            mutableStateOf<Result<SensorData>>(Result.failure(Exception("Initial")))
         }
-    }
 
-    if (data.isSuccess) {
-        val sensor = data.getOrNull()!!
-        Column {
-            Text("Humidity = " + sensor.ah)
-            Text("Soil moisture = " + sensor.sm)
-            Text("Soil Temp = " + sensor.st)
-            Text("Atm Temp = " + sensor.at)
+        val scope = rememberCoroutineScope()
+        LaunchedEffect(key1 = Unit) {
+            fixedRateTimer("observer", startAt = Date(), period = 1000) {
+                scope.launch(Dispatchers.IO) { withTimeout(2000) { data = API.getSensorData("1") } }
+            }
         }
-    } else {
-        Text("No data: " + data.exceptionOrNull())
+
+        if (data.isSuccess) {
+            val sensor = data.getOrNull()!!
+            Column {
+                Text("Humidity = " + sensor.ah)
+                Text("Soil moisture = " + sensor.sm)
+                Text("Soil Temp = " + sensor.st)
+                Text("Atm Temp = " + sensor.at)
+            }
+        } else {
+            Text("No data: " + data.exceptionOrNull())
+        }
     }
 }
 

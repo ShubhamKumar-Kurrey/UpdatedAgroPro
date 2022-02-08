@@ -28,7 +28,7 @@ fun Sun_Wind() {
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(color = Color.White),
+            .background(color = Color(0xFFF3F3F3)),
         contentAlignment = Alignment.Center
     ) {
         Box(
@@ -103,7 +103,7 @@ fun SunWindReading(slaveId: String) {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
-        Text(text = "Sun & Wind", fontSize = 30.sp, fontWeight = FontWeight.Bold, color = Color.Blue)
+        Text(text = "Sun & Wind", fontSize = 30.sp, fontWeight = FontWeight.Bold, color = Color(0xFF1AB68A))
         Spacer(modifier = Modifier.padding(vertical = 25.dp))
         circlebarSunWind(percentage = sl, symbol = "%", sensorName ="Sun Light\n Intensity", sensorReadingValue = sl )
         circlebarSunWind(percentage = ws, symbol = " m/s", sensorName ="Wind Speed", sensorReadingValue = ws )

@@ -3,9 +3,9 @@ plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
 
-    //id 'kotlin-android'
+//    id 'kotlin-android'
     id 'com.google.android.secrets-gradle-plugin' version '1.1.0'
-    //id 'kotlin-kapt'
+//    id 'kotlin-kapt'
     //id 'dagger.hilt.android.plugin'
 }
 

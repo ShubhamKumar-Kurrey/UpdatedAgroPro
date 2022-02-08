@@ -208,7 +208,7 @@ fun SwipingScreen(
     Column() {
         HorizontalPager(
             modifier = Modifier
-                .fillMaxSize(1f).background(color=Color(0xFFE6E6E6)),
+                .fillMaxSize(1f).background(color=Color(0xFFF3F3F3)),
             count = 4,
             state = pageState
         ) { page ->
