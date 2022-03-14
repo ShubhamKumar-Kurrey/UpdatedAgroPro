@@ -32,12 +32,15 @@ import kotlin.concurrent.fixedRateTimer
 fun WeatherPage() {
     Column(
         modifier = Modifier
-            .fillMaxWidth()
-            .padding(top = 40.dp, start = 16.dp, end = 16.dp),
+            .fillMaxSize()
+            .padding(top = 40.dp, start = 16.dp, end = 16.dp)
+            .background(color = Color(0xFFF3F3F3)),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+
         HeaderImage()
         MainInfo(slaveId = 1.toString())
+        Spacer(modifier = Modifier.padding(vertical = 15.dp))
         InfoTable(slaveId = 1.toString())
     }
 }
@@ -50,7 +53,7 @@ fun HeaderImage() {
         modifier = Modifier
             .width(50.dp)
             .size(50.dp),
-        tint= Color.Blue
+        tint= Color(0xFF1AB68A)
     )
 }
 
@@ -88,7 +91,7 @@ fun InfoTable(slaveId: String) {
             .fillMaxWidth()
             .clip(RoundedCornerShape(4.dp))
             .background(
-                Color.LightGray
+                Color(0xFFFFFFFF)
             )
     ) {
         Row(Modifier.padding(16.dp)) {
@@ -154,18 +157,18 @@ fun MainInfo(slaveId: String) {
         modifier = Modifier.padding(top = 24.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(text = at.toString()+"°", color = Color.Blue, fontSize = 48.sp, fontWeight = FontWeight.Bold)
+        Text(text = at.toString()+"°", color = Color(0xFF1AB68A), fontSize = 64.sp, fontWeight = FontWeight.Bold)
         Text(
             text = "Bhuli, Dhanbad",
-            color = Color.Blue,
+            color = Color(0xFF1AB68A),
             fontWeight = FontWeight.Bold,
-            fontSize = 15.sp,
+            fontSize = 16.sp,
             modifier = Modifier.padding(top = 16.dp)
         )
         Text(
             text = "Today cloud is clear.\nVery less chance of Rain",
             color = Color.Black,
-            fontSize = 16.sp,
+            fontSize = 20.sp,
             textAlign = TextAlign.Center,
             modifier = Modifier.padding(vertical = 24.dp)
         )
@@ -177,16 +180,17 @@ fun MainInfo(slaveId: String) {
 @Composable
 fun InfoItem(@DrawableRes iconRes: Int, title: String, subtitle: String, modifier: Modifier) {
     Row(modifier = modifier) {
-        Image(
+        Icon(
             painter = painterResource(id = iconRes),
             contentDescription = null,
             modifier = Modifier
                 .padding(end = 8.dp)
-                .width(40.dp)
+                .width(40.dp),
+            tint= Color(0xFF1AB68A)
         )
         Column {
-            Text(title, color = Color.Blue)
-            Text(subtitle, color = Color.Blue, fontWeight = FontWeight.Bold)
+            Text(title, color = Color(0xFF1AB68A))
+            Text(subtitle, color =Color(0xFF1AB68A), fontWeight = FontWeight.Bold)
         }
     }
 }

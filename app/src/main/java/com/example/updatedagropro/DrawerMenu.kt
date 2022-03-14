@@ -163,8 +163,9 @@ fun Home(openDrawer: () -> Unit) {
 fun WeatherForecast(openDrawer: () -> Unit) {
         Column(
             modifier = Modifier
+                .background(color = Color(0xFFF3F3F3))
                 .fillMaxSize()
-                .padding(15.dp),
+                .padding(25.dp),
             verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.CenterHorizontally)
         {

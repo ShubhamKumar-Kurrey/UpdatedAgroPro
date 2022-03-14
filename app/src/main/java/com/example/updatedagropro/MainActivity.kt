@@ -5,6 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import com.example.updatedagropro.pHscale.circularProgressBar
 import com.example.updatedagropro.pHscale.pHcircularBar
+import com.example.updatedagropro.pHscale.phCalculator
 import com.example.updatedagropro.ui.theme.UpdatedAgroProTheme
 
 class MainActivity : ComponentActivity() {
@@ -13,7 +14,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             UpdatedAgroProTheme {
                AppMainScreen()
-
+               // phCalculator()
             }
         }
     }

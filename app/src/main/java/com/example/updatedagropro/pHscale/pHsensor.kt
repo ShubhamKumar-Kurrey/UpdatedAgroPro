@@ -27,7 +27,7 @@ fun pHsensor(openDrawer: () -> Unit) {
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally) {
-        pHcircularBar(percentage = 70f, sensorReadingValue = 0.3f, symbol = "pH", sensorName = "pH Sensor")
+       pHcircularBar(percentage = 60f, sensorReadingValue = 0.3f, symbol = "pH", sensorName = "pH Sensor")
     }
 
 }

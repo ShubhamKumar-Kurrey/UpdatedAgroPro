@@ -102,7 +102,6 @@ fun SunWindReading(slaveId: String) {
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-
         Text(text = "Sun & Wind", fontSize = 30.sp, fontWeight = FontWeight.Bold, color = Color(0xFF1AB68A))
         Spacer(modifier = Modifier.padding(vertical = 25.dp))
         circlebarSunWind(percentage = sl, symbol = "%", sensorName ="Sun Light\n Intensity", sensorReadingValue = sl )
